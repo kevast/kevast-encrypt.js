@@ -1,0 +1,31 @@
+{
+  "name": "kevast-encrypt.js",
+  "version": "0.0.1",
+  "description": "Encryption middleware for kevast.js.",
+  "main": "dist/nodejs/index.js",
+  "keywords": [
+    "kevast",
+    "key",
+    "value",
+    "key-value",
+    "storage",
+    "middleware",
+    "encrypt",
+    "encryption",
+    "crypto",
+    "encipher"
+  ],
+  "scripts": {},
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": "git@github.com:kevast/kevast-encrypt.js.git",
+  "author": "Andie <zchangan@163.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^10.12.12",
+    "kevast": "^0.0.7",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.2"
+  }
+}
