@@ -1,41 +1,29 @@
-import * as crypto from 'crypto';
-import {IDuplexMiddleware} from 'kevast/dist/nodejs/Middleware';
-import {Pair} from 'kevast/dist/nodejs/Pair';
-import * as stream from 'stream';
+import * as crypto from 'crypto-js';
+import { IDuplexMiddleware } from 'kevast/dist/nodejs/Middleware';
+import { Pair } from 'kevast/dist/nodejs/Pair';
 
 export = class KevastEncrypt implements IDuplexMiddleware {
   public static randomKey(length: number = 32): string {
-    return crypto.randomBytes(length / 2).toString('hex');
+    return crypto.lib.WordArray.random(length / 2).toString();
   }
-  private algorithm: string;
-  private key: string | Buffer | NodeJS.TypedArray | DataView;
-  private iv: string | Buffer | NodeJS.TypedArray | DataView;
-  private options: stream.TransformOptions;
-  public constructor(
-    key: string | Buffer | NodeJS.TypedArray | DataView,
-    algorithm: string = 'aes-256-cbc',
-    iv: string | Buffer | NodeJS.TypedArray | DataView = crypto.randomBytes(16),
-    options: stream.TransformOptions = null,
-  ) {
-    crypto.createCipheriv(algorithm, key, iv, options);
-    this.algorithm = algorithm;
+  private key: string;
+  private mode: crypto.Mode;
+  public constructor(key: string, mode: crypto.Mode = crypto.mode.CBC) {
     this.key = key;
-    this.iv = iv;
-    this.options = options;
+    this.mode = mode;
   }
   public async onGet(pair: Pair, next: () => Promise<void>) {
     await next();
     if (typeof pair[1] === 'string') {
-      const decipher = crypto.createDecipheriv(this.algorithm, this.key, this.iv, this.options);
-      let plainBuffer = decipher.update(pair[1], 'hex');
-      plainBuffer = Buffer.concat([plainBuffer, decipher.final()]);
-      const plain = plainBuffer.toString('utf8');
+      const plain = crypto.AES.decrypt(pair[1], this.key, {
+        mode: this.mode,
+      }).toString(crypto.enc.Utf8);
       pair[1] = plain;
     }
   }
   public async onSet(pair: Pair, next: () => Promise<void>) {
-    const cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv, this.options);
-    let encrypted = cipher.update(pair[1], 'utf8', 'hex');
-    encrypted += cipher.final('hex');
+    const encrypted = crypto.AES.encrypt(pair[1], this.key, {
+      mode: this.mode,
+    }).toString();
     pair[1] = encrypted;
   }};
