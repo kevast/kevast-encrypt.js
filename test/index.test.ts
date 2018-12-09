@@ -6,7 +6,7 @@ import KevastEncrypt = require('../index');
 describe('Test basic function', () => {
   const kevast = new Kevast(new KevastMemory());
   const key = KevastEncrypt.randomKey();
-  let veryLong: string;
+  const veryLong: string = KevastEncrypt.randomKey(100000);
   kevast.use(new KevastEncrypt(key));
   it('Get null or default', async () => {
     assert(await kevast.get('key1') === null);
@@ -22,7 +22,6 @@ describe('Test basic function', () => {
   });
   it('Set very long value', async () => {
     await kevast.delete('key1');
-    veryLong = KevastEncrypt.randomKey(100000);
     await kevast.set('key2', veryLong);
     const onlyOne = [...(await kevast.values())][0];
     assert(onlyOne !== veryLong);
