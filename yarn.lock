@@ -614,11 +614,6 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@types/crypto-js@^3.1.43":
-  version "3.1.43"
-  resolved "https://registry.npmjs.org/@types/crypto-js/-/crypto-js-3.1.43.tgz#b859347d6289ba13e347c335a4c9efa63337a748"
-  integrity sha512-EHe/YKctU3IYNBsDmSOPX/7jLHPRlx8WaiDKSY9JCTnJ8XJeM4c0ZJvx+9Gxmr2s2ihI92R+3U/gNL1sq5oRuQ==
-
 "@types/mocha@^5.2.5":
   version "5.2.5"
   resolved "https://registry.npmjs.org/@types/mocha/-/mocha-5.2.5.tgz#8a4accfc403c124a0bafe8a9fc61a05ec1032073"
