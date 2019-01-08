@@ -17,11 +17,11 @@
   "scripts": {
     "lint": "tslint -p tsconfig.json",
     "test": "mocha --require espower-typescript/guess \"test/**/*.ts\"",
-    "build": "npm run build:nodejs && npm run build:browser",
+    "build": "yarn build:nodejs && yarn build:browser",
     "build:browser": "webpack",
     "build:nodejs": "tsc",
     "clean": "rm -rf ./dist/*",
-    "prepublishOnly": "npm run test && npm run build"
+    "prepublishOnly": "yarn test && yarn build"
   },
   "files": [
     "dist/**/*"
