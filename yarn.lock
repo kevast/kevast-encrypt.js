@@ -3132,15 +3132,15 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-kevast-memory@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/kevast-memory/-/kevast-memory-0.2.2.tgz#fa0c80671212a5195a6c37422f953f908bd76503"
-  integrity sha512-JcEq5R+cItMuXbIYK0djI1JinoBAgvsbXHRHdL8Niw6G/O+rD/DiPZ4i2ZVdJEqHa2umfTvU4iVvNSX7RrKzBw==
-
-kevast@^0.2.3:
+kevast-memory@^0.2.3:
   version "0.2.3"
-  resolved "https://registry.npmjs.org/kevast/-/kevast-0.2.3.tgz#3b9a464be0b5d5d07d76bc208b9b092f4110297b"
-  integrity sha512-HYtlAXZWInlcJscsZginQ3Bvp2ucGG/N/PzHFRi2dVwDpugYd3kvrCkUIVCV15LO7AT4sv6R3f7yrWGZzks/YQ==
+  resolved "https://registry.npmjs.org/kevast-memory/-/kevast-memory-0.2.3.tgz#24480106424421130ddbbab1d197626f49a83f02"
+  integrity sha512-JywoDGdAj98wdh3wW7RNJzVXGzikHvz+674ydOJhagUEgCJDTUzfCJ3krc84gQatZ2788Gt/aFThQmzaWSdNQQ==
+
+kevast@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.npmjs.org/kevast/-/kevast-0.2.4.tgz#3b50c892891bcc8f746265959e82b89f6e535c92"
+  integrity sha512-bewCs8EL4pYGMqNhyTWFy6f+no7rkJQtESw9xtxXfB5bivdiTztjsSWxnBcj3DExCXR2wjJJDv65HKTArl2wWw==
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
