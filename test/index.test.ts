@@ -1,36 +1,38 @@
 import assert = require('assert');
 import { Kevast } from 'kevast';
+import { KevastMemory } from 'kevast-memory';
 import { KevastEncrypt } from '../index';
 
 describe('Test basic function', () => {
   let kevast: Kevast;
   let key: string;
   let veryLong: string;
+  let map: Map<string, string>;
   before(async () => {
-    kevast = await Kevast.create();
+    map = new Map();
+    kevast = new Kevast(new KevastMemory(map));
     key = KevastEncrypt.randomKey();
-    veryLong = KevastEncrypt.randomKey(100000);
+    veryLong = KevastEncrypt.randomKey(10000);
     kevast.use(new KevastEncrypt(key));
   });
-  it('Get null or default', () => {
-    assert(kevast.get('key1') === null);
-    assert(kevast.get('key1', 'default') === 'default');
+  it('Get null or default', async () => {
+    assert(await kevast.get('key1') === undefined);
+    assert(await kevast.get('key1', 'default') === 'default');
   });
-  it('Set normal', async () => {
+  it('Set normally', async () => {
     await kevast.set('key1', 'value1');
-    const onlyOne = [...kevast.values()][0];
-    assert(onlyOne !== 'value1');
+    const actual = map.get('key1');
+    assert(actual !== 'value1');
   });
-  it('Get normal', () => {
-    assert(kevast.get('key1') === 'value1');
+  it('Get normally', async () => {
+    assert(await kevast.get('key1') === 'value1');
   });
   it('Set very long value', async () => {
-    await kevast.delete('key1');
     await kevast.set('key2', veryLong);
-    const onlyOne = [...kevast.values()][0];
-    assert(onlyOne !== veryLong);
+    const actual = map.get('key2');
+    assert(actual !== veryLong);
   });
   it('Get very long value', async () => {
-    assert(kevast.get('key2') === veryLong);
+    assert(await kevast.get('key2') === veryLong);
   });
 });
