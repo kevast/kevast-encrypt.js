@@ -1,6 +1,6 @@
 {
   "name": "kevast-encrypt",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Encryption middleware for kevast.js.",
   "main": "dist/nodejs/index.js",
   "keywords": [
