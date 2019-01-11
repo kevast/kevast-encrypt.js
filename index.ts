@@ -20,8 +20,13 @@ export class KevastEncrypt implements DuplexMiddleware {
   }
   public afterGet(pair: Pair) {
     if (typeof pair.value === 'string') {
-      const plain: any = crypto.AES.decrypt(pair.value, this.key);
-      if (plain.sigBytes < 0) {
+      let plain: any;
+      try {
+        plain = crypto.AES.decrypt(pair.value, this.key);
+        if (plain.sigBytes < 0) {
+          throw new Error();
+        }
+      } catch (err) {
         throw new Error('Fail to decrypt: wrong key.');
       }
       pair.value = plain.toString(crypto.enc.Utf8);
