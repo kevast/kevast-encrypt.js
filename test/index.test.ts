@@ -15,6 +15,11 @@ describe('Test basic function', () => {
     veryLong = KevastEncrypt.randomKey(10000);
     kevast.use(new KevastEncrypt(key));
   });
+  it('Construction', () => {
+    assert.throws(() => {
+      const _ = new KevastEncrypt(1 as any as string);
+    });
+  });
   it('Get null or default', async () => {
     assert(await kevast.get('key1') === undefined);
     assert(await kevast.get('key1', 'default') === 'default');
@@ -26,6 +31,15 @@ describe('Test basic function', () => {
   });
   it('Get normally', async () => {
     assert(await kevast.get('key1') === 'value1');
+  });
+  it('Get with wrong key', async () => {
+    const tmp = new Kevast(new KevastMemory(map));
+    tmp.use(new KevastEncrypt(key + '1'));
+    try {
+      await tmp.get('key1');
+    } catch (err) {
+      assert(err.message === 'Fail to decrypt: wrong key.');
+    }
   });
   it('Set very long value', async () => {
     await kevast.set('key2', veryLong);
