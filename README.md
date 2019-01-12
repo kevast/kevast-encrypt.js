@@ -25,7 +25,7 @@ npm install kevast-encrypt
 
 ### Browser
 ```html
-<script src="https://cdn.jsdelivr.net/npm/kevast-encrypt/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/kevast-encrypt/dist/kevast-encrypt.min.js"></script>
 ```
 
 ## Usage
