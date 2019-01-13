@@ -22,7 +22,8 @@ export class KevastEncrypt implements DuplexMiddleware {
     if (typeof pair.value === 'string') {
       let plain: any;
       try {
-        plain = crypto.AES.decrypt(pair.value, this.key);
+        const base64 = crypto.enc.Base64.parse(pair.value).toString(crypto.enc.Utf8);
+        plain = crypto.AES.decrypt(base64, this.key);
         if (plain.sigBytes < 0) {
           throw new Error();
         }
@@ -33,6 +34,7 @@ export class KevastEncrypt implements DuplexMiddleware {
     }
   }
   public beforeSet(pair: Pair) {
-    pair.value = crypto.AES.encrypt(pair.value as string, this.key).toString();
+    const encrypted = crypto.AES.encrypt(pair.value as string, this.key).toString();
+    pair.value = crypto.enc.Base64.stringify(crypto.enc.Utf8.parse(encrypted));
   }
 }
