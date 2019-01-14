@@ -9,7 +9,9 @@
 
 Encryption middleware for [kevast.js](https://github.com/kevast/kevast.js).
 
-For encryption detail, refer to [crypto-js](https://github.com/brix/crypto-js).
+Kevast-gist encrypts data with AES-128-CBC with salt.
+
+For encryption detail, refer to [node-forge](https://www.npmjs.com/package/node-forge#cipher).
 
 ## Installation
 ### Node.js
@@ -38,7 +40,7 @@ const assert = require('assert');
 (async () => {
   const map = new Map();
   const kevast = new Kevast(new KevastMemory(map));
-  kevast.use(new KevastEncrypt(KevastEncrypt.randomKey()));
+  kevast.use(new KevastEncrypt(KevastEncrypt.randomString()));
   await kevast.set('key', 'value');
   console.log(map);
   assert(await kevast.get('key') === 'value');
