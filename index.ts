@@ -1,9 +1,9 @@
-import * as crypto from 'crypto-js';
 import { DuplexMiddleware } from 'kevast/dist/Middleware';
 import { Pair } from 'kevast/dist/Pair';
+const forge = require('node-forge');
 
 export class KevastEncrypt implements DuplexMiddleware {
-  public static randomKey(length: number = 32): string {
+  public static randomString(length: number = 32): string {
     let result = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     for (let i = 0; i < length; i++) {
@@ -11,30 +11,70 @@ export class KevastEncrypt implements DuplexMiddleware {
     }
     return result;
   }
-  private key: string;
-  public constructor(key: string) {
-    if (typeof key !== 'string') {
-      throw new TypeError('Key must be a string.');
+  private password: string;
+  public constructor(password: string) {
+    if (typeof password !== 'string') {
+      throw new TypeError('Password must be a string.');
     }
-    this.key = key;
+    this.password = password;
   }
   public afterGet(pair: Pair) {
     if (typeof pair.value === 'string') {
-      let plain: any;
-      try {
-        const base64 = crypto.enc.Base64.parse(pair.value).toString(crypto.enc.Utf8);
-        plain = crypto.AES.decrypt(base64, this.key);
-        if (plain.sigBytes < 0) {
-          throw new Error();
-        }
-      } catch (err) {
-        throw new Error('Fail to decrypt: wrong key.');
-      }
-      pair.value = plain.toString(crypto.enc.Utf8);
+      const decrypted = decrypt(pair.value, this.password);
+      pair.value = decrypted;
     }
   }
   public beforeSet(pair: Pair) {
-    const encrypted = crypto.AES.encrypt(pair.value as string, this.key).toString();
-    pair.value = crypto.enc.Base64.stringify(crypto.enc.Utf8.parse(encrypted));
+    const encrypted = encrypt(pair.value as string, this.password);
+    pair.value = encrypted;
   }
+}
+
+// AES 128 CBC
+function encrypt(plain: string, password: string): string {
+  const input = Buffer.from(plain);
+  // AES 128
+  const keySize = 16;
+  const ivSize = 16;
+
+  const salt = forge.random.getBytesSync(8);
+  const derivedBytes = forge.pbe.opensslDeriveBytes(password, salt, keySize + ivSize);
+  const buffer = forge.util.createBuffer(derivedBytes);
+  const key = buffer.getBytes(keySize);
+  const iv = buffer.getBytes(ivSize);
+
+  const cipher = forge.cipher.createCipher('AES-CBC', key);
+  cipher.start({iv});
+  cipher.update(forge.util.createBuffer(input, 'binary'));
+  cipher.finish();
+
+  const output = forge.util.createBuffer();
+  output.putBytes('Salted__');
+  output.putBytes(salt);
+  output.putBuffer(cipher.output);
+  return output.toHex();
+}
+
+function decrypt(text: string, password: string): string {
+  const input = Buffer.from(text, 'hex');
+  const inputBuffer = forge.util.createBuffer(input, 'binary');
+  inputBuffer.getBytes('Salted__'.length);
+  const salt = inputBuffer.getBytes(8);
+
+  const keySize = 16;
+  const ivSize = 16;
+
+  const derivedBytes = forge.pbe.opensslDeriveBytes(password, salt, keySize + ivSize);
+  const buffer = forge.util.createBuffer(derivedBytes);
+  const key = buffer.getBytes(keySize);
+  const iv = buffer.getBytes(ivSize);
+
+  const decipher = forge.cipher.createDecipher('AES-CBC', key);
+  decipher.start({iv});
+  decipher.update(inputBuffer);
+  const result = decipher.finish();
+  if (!result) {
+    throw new Error('Fail to decrypt: wrong password.');
+  }
+  return decipher.output.toString();
 }
