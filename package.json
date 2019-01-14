@@ -1,6 +1,6 @@
 {
   "name": "kevast-encrypt",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "Encryption middleware for kevast.js.",
   "main": "dist/index.js",
   "keywords": [
@@ -46,7 +46,7 @@
     "espower-typescript": "^9.0.1",
     "istanbul": "1.1.0-alpha.1",
     "kevast": "^0.2.4",
-    "kevast-memory": "^0.2.3",
+    "kevast-memory": "^0.2.4",
     "mocha": "^5.2.0",
     "power-assert": "^1.6.1",
     "ts-node": "^7.0.1",
@@ -56,6 +56,6 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
-    "crypto-js": "^3.1.9-1"
+    "node-forge": "^0.7.6"
   }
 }
