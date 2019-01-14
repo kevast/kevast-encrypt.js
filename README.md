@@ -9,7 +9,7 @@
 
 Encryption middleware for [kevast.js](https://github.com/kevast/kevast.js).
 
-Kevast-gist encrypts data with AES-128-CBC with salt.
+Kevast-gist encrypts data with AES-128-CBC.
 
 For encryption detail, refer to [node-forge](https://www.npmjs.com/package/node-forge#cipher).
 
