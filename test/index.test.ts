@@ -5,19 +5,21 @@ import { KevastEncrypt } from '../index';
 
 describe('Test basic function', () => {
   let kevast: Kevast;
-  let key: string;
+  let password: string;
   let veryLong: string;
   let map: Map<string, string>;
   before(async () => {
     map = new Map();
     kevast = new Kevast(new KevastMemory(map));
-    key = KevastEncrypt.randomKey();
-    veryLong = KevastEncrypt.randomKey(10000);
-    kevast.use(new KevastEncrypt(key));
+    password = KevastEncrypt.randomString();
+    veryLong = KevastEncrypt.randomString(10000);
+    kevast.use(new KevastEncrypt(password));
   });
   it('Construction', () => {
     assert.throws(() => {
       const _ = new KevastEncrypt(1 as any as string);
+    }, {
+      message: 'Password must be a string.',
     });
   });
   it('Get null or default', async () => {
@@ -34,12 +36,12 @@ describe('Test basic function', () => {
   });
   it('Get with wrong key', async () => {
     const tmp = new Kevast(new KevastMemory(map));
-    tmp.use(new KevastEncrypt(key + '1'));
-    try {
+    tmp.use(new KevastEncrypt(password + '1'));
+    await assertThrowsAsync(async () => {
       await tmp.get('key1');
-    } catch (err) {
-      assert(err.message === 'Fail to decrypt: wrong key.');
-    }
+    }, {
+      message: 'Fail to decrypt: wrong password.',
+    });
   });
   it('Set very long value', async () => {
     await kevast.set('key2', veryLong);
@@ -50,3 +52,15 @@ describe('Test basic function', () => {
     assert(await kevast.get('key2') === veryLong);
   });
 });
+
+/* tslint:disable: ban-types */
+async function assertThrowsAsync(fn: Function, regExp: RegExp | Function | Object | Error) {
+  let f = () => {};
+  try {
+    await fn();
+  } catch (e) {
+    f = () => {throw e; };
+  } finally {
+    assert.throws(f, regExp);
+  }
+}
