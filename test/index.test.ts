@@ -22,17 +22,17 @@ describe('Test basic function', () => {
       message: 'Password must be a string.',
     });
   });
-  it('Get null or default', async () => {
+  it('Normal condition', async () => {
     assert(await kevast.get('key1') === undefined);
     assert(await kevast.get('key1', 'default') === 'default');
-  });
-  it('Set normally', async () => {
     await kevast.set('key1', 'value1');
     const actual = map.get('key1');
     assert(actual !== 'value1');
-  });
-  it('Get normally', async () => {
     assert(await kevast.get('key1') === 'value1');
+  });
+  it('Empty value', async () => {
+    await kevast.set('empty', '');
+    assert(await kevast.get('empty') === '');
   });
   it('Get with wrong key', async () => {
     const tmp = new Kevast(new KevastMemory(map));

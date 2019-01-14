@@ -37,8 +37,8 @@ function encrypt(plain: string, password: string): string {
   const keySize = 16;
   const ivSize = 16;
 
-  const salt = forge.random.getBytesSync(8);
-  const derivedBytes = forge.pbe.opensslDeriveBytes(password, salt, keySize + ivSize);
+  // const salt = forge.random.getBytesSync(8);
+  const derivedBytes = forge.pbe.opensslDeriveBytes(password, null, keySize + ivSize);
   const buffer = forge.util.createBuffer(derivedBytes);
   const key = buffer.getBytes(keySize);
   const iv = buffer.getBytes(ivSize);
@@ -48,23 +48,24 @@ function encrypt(plain: string, password: string): string {
   cipher.update(forge.util.createBuffer(input, 'binary'));
   cipher.finish();
 
-  const output = forge.util.createBuffer();
-  output.putBytes('Salted__');
-  output.putBytes(salt);
-  output.putBuffer(cipher.output);
-  return output.toHex();
+  // const output = forge.util.createBuffer();
+  // output.putBytes('Salted__');
+  // output.putBytes(salt);
+  // output.putBuffer(cipher.output);
+  // return output.toHex();
+  return cipher.output.toHex();
 }
 
 function decrypt(text: string, password: string): string {
   const input = Buffer.from(text, 'hex');
   const inputBuffer = forge.util.createBuffer(input, 'binary');
-  inputBuffer.getBytes('Salted__'.length);
-  const salt = inputBuffer.getBytes(8);
+  // inputBuffer.getBytes('Salted__'.length);
+  // const salt = inputBuffer.getBytes(8);
 
   const keySize = 16;
   const ivSize = 16;
 
-  const derivedBytes = forge.pbe.opensslDeriveBytes(password, salt, keySize + ivSize);
+  const derivedBytes = forge.pbe.opensslDeriveBytes(password, null, keySize + ivSize);
   const buffer = forge.util.createBuffer(derivedBytes);
   const key = buffer.getBytes(keySize);
   const iv = buffer.getBytes(ivSize);
@@ -76,5 +77,13 @@ function decrypt(text: string, password: string): string {
   if (!result) {
     throw new Error('Fail to decrypt: wrong password.');
   }
-  return decipher.output.toString();
+  let plain: string = '';
+  try {
+    plain = decipher.output.toString();
+  } catch (err) {
+    if (err.message === 'URI malformed') {
+      throw new Error('Fail to decrypt: wrong password.');
+    }
+  }
+  return plain;
 }
