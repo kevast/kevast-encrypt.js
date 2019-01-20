@@ -24,7 +24,6 @@ describe('Test basic function', () => {
   });
   it('Normal condition', async () => {
     assert(await kevast.get('key1') === undefined);
-    assert(await kevast.get('key1', 'default') === 'default');
     await kevast.set('key1', 'value1');
     const actual = map.get('key1');
     assert(actual !== 'value1');
@@ -33,15 +32,6 @@ describe('Test basic function', () => {
   it('Empty value', async () => {
     await kevast.set('empty', '');
     assert(await kevast.get('empty') === '');
-  });
-  it('Get with wrong key', async () => {
-    const tmp = new Kevast(new KevastMemory(map));
-    tmp.use(new KevastEncrypt(password + '1'));
-    await assertThrowsAsync(async () => {
-      await tmp.get('key1');
-    }, {
-      message: 'Fail to decrypt: wrong password.',
-    });
   });
   it('Set very long value', async () => {
     await kevast.set('key2', veryLong);
