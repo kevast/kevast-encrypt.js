@@ -1,6 +1,10 @@
 import { DuplexMiddleware } from 'kevast/dist/Middleware';
 import { Pair } from 'kevast/dist/Pair';
-const forge = require('node-forge');
+// Used by forgePbe
+require('node-forge/lib/md5');
+const forgePbe = require('node-forge/lib/pbe');
+const forgeUtil = require('node-forge/lib/util');
+const forgeCipher = require('node-forge/lib/cipher');
 
 export class KevastEncrypt implements DuplexMiddleware {
   public static randomString(length: number = 32): string {
@@ -37,53 +41,34 @@ function encrypt(plain: string, password: string): string {
   const keySize = 16;
   const ivSize = 16;
 
-  // const salt = forge.random.getBytesSync(8);
-  const derivedBytes = forge.pbe.opensslDeriveBytes(password, null, keySize + ivSize);
-  const buffer = forge.util.createBuffer(derivedBytes);
+  const derivedBytes = forgePbe.opensslDeriveBytes(password, null, keySize + ivSize);
+  const buffer = forgeUtil.createBuffer(derivedBytes);
   const key = buffer.getBytes(keySize);
   const iv = buffer.getBytes(ivSize);
 
-  const cipher = forge.cipher.createCipher('AES-CBC', key);
+  const cipher = forgeCipher.createCipher('AES-CBC', key);
   cipher.start({iv});
-  cipher.update(forge.util.createBuffer(input, 'binary'));
+  cipher.update(forgeUtil.createBuffer(input, 'binary'));
   cipher.finish();
 
-  // const output = forge.util.createBuffer();
-  // output.putBytes('Salted__');
-  // output.putBytes(salt);
-  // output.putBuffer(cipher.output);
-  // return output.toHex();
   return cipher.output.toHex();
 }
 
 function decrypt(text: string, password: string): string {
   const input = Buffer.from(text, 'hex');
-  const inputBuffer = forge.util.createBuffer(input, 'binary');
-  // inputBuffer.getBytes('Salted__'.length);
-  // const salt = inputBuffer.getBytes(8);
+  const inputBuffer = forgeUtil.createBuffer(input, 'binary');
 
   const keySize = 16;
   const ivSize = 16;
 
-  const derivedBytes = forge.pbe.opensslDeriveBytes(password, null, keySize + ivSize);
-  const buffer = forge.util.createBuffer(derivedBytes);
+  const derivedBytes = forgePbe.opensslDeriveBytes(password, null, keySize + ivSize);
+  const buffer = forgeUtil.createBuffer(derivedBytes);
   const key = buffer.getBytes(keySize);
   const iv = buffer.getBytes(ivSize);
 
-  const decipher = forge.cipher.createDecipher('AES-CBC', key);
+  const decipher = forgeCipher.createDecipher('AES-CBC', key);
   decipher.start({iv});
   decipher.update(inputBuffer);
   const result = decipher.finish();
-  if (!result) {
-    throw new Error('Fail to decrypt: wrong password.');
-  }
-  let plain: string = '';
-  try {
-    plain = decipher.output.toString();
-  } catch (err) {
-    if (err.message === 'URI malformed') {
-      throw new Error('Fail to decrypt: wrong password.');
-    }
-  }
-  return plain;
+  return decipher.output.toString();
 }
