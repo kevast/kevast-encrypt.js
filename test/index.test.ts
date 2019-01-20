@@ -29,10 +29,6 @@ describe('Test basic function', () => {
     assert(actual !== 'value1');
     assert(await kevast.get('key1') === 'value1');
   });
-  it('Empty value', async () => {
-    await kevast.set('empty', '');
-    assert(await kevast.get('empty') === '');
-  });
   it('Set very long value', async () => {
     await kevast.set('key2', veryLong);
     const actual = map.get('key2');
