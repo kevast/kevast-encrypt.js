@@ -3132,10 +3132,10 @@ kevast-memory@^0.2.4:
   resolved "https://registry.npmjs.org/kevast-memory/-/kevast-memory-0.2.4.tgz#c35a3b01c8093af189adc312015295ab463ac9b0"
   integrity sha512-1yj7w+aqR8oYXO5s0B0jqehC8rPvoYS8yfEdLwBQ0EjUpnLvff3ezexCZ88RaW2YT+Ojwj0DfTLUUenBAGELzA==
 
-kevast@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.npmjs.org/kevast/-/kevast-0.2.4.tgz#3b50c892891bcc8f746265959e82b89f6e535c92"
-  integrity sha512-bewCs8EL4pYGMqNhyTWFy6f+no7rkJQtESw9xtxXfB5bivdiTztjsSWxnBcj3DExCXR2wjJJDv65HKTArl2wWw==
+kevast@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.npmjs.org/kevast/-/kevast-0.4.3.tgz#6a7b8265b6c6ad875c4e496499b7bd36271fff5a"
+  integrity sha512-rGxbIhtF1ae9iRCVizz+9Ghk9HHMoQM7nc+DhYlS8SnOSS902OEaPr5oXffwUj15vr2hTbbXZ9Vq4+dxAIHsOg==
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
@@ -4873,10 +4873,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
-  integrity sha512-VCj5UiSyHBjwfYacmDuc/NOk4QQixbE+Wn7MFJuS0nRuPQbof132Pw4u53dm264O8LPc2MVsc7RJNml5szurkg==
+typescript@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-3.2.4.tgz#c585cb952912263d915b462726ce244ba510ef3d"
+  integrity sha512-0RNDbSdEokBeEAkgNbxJ+BLwSManFy9TeXz8uW+48j/xhEXv1ePME60olyzw2XzUqUBNAYFeJadIqAgNqIACwg==
 
 uglify-js@^3.1.4:
   version "3.4.9"
